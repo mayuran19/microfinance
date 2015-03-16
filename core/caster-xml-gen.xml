@@ -1,0 +1,7 @@
+<project name="castor-xml-gen" basedir=".">
+	<target name="castor:schema:gen" depends="init" description="Generate an XML schema from an XML document instance.">
+		<taskdef name="schema-gen" classname="org.castor.anttask.XMLInstance2SchemaTask" classpathref="castor.class.path" />
+		<mkdir dir="generated" />
+		<schema-gen file="src/main/resources/input.xml" schemaFileName="target/generated/schema/input.xsd" />
+	</target>
+</project>

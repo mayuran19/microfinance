@@ -1,0 +1,58 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xmlns:context="http://www.springframework.org/schema/context"
+xsi:schemaLocation="http://www.springframework.org/schema/beans
+http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+http://www.springframework.org/schema/context
+http://www.springframework.org/schema/context/spring-context-2.5.xsd">
+	
+	<!-- Database Configuration -->
+	<import resource="config/spring/DataSource.xml"/>
+	<import resource="config/spring/HibernateSessionFactory.xml"/>
+ 
+	<!-- Beans Declaration -->
+	<import resource="config/spring/utilityBeans.xml"/>
+	<import resource="config/spring/emailBeans.xml"/>
+	
+	<!-- AOP configuration -->
+	<import resource="config/spring/spring-aop.xml"/>
+	
+ 	<context:component-scan base-package="com.suwadi.dao.impl" />
+ 	<context:component-scan base-package="com.suwadi.service.impl" />
+ 	<context:component-scan base-package="com.suwadi.dao.hibernate.interceptor" />
+ 	<context:component-scan base-package="com.suwadi.dao.hibernate.events" />
+ 	<context:component-scan base-package="com.suwadi.message.email" />
+ 	<context:component-scan base-package="com.suwadi.aop" />
+ 	<context:component-scan base-package="com.mayuran19.reports.service.impl" />
+ 	<context:component-scan base-package="com.mayuran19.reports.jasperReport" />
+ 	
+ 	<!-- property files -->
+ 	<bean id="propertyPlaceholderConfigurer" class="com.suwadi.utils.spring.CustomPropertyPlaceholderConfigurer">
+		<property name="locations">
+			<list>
+				<value>classpath:/config/database/properties/database.properties</value>
+				<value>classpath:/config/database/properties/database-${AppEnv}.properties</value>
+				<value>classpath:/config/app/application.properties</value>
+				<value>classpath:/config/app/application-${AppEnv}.properties</value>
+				<value>classpath:/config/sql/quries.xml</value>
+			</list>
+		</property>
+		<property name="ignoreResourceNotFound" value="true" />
+		<property name="ignoreUnresolvablePlaceholders" value="true" />
+		<property name="searchSystemEnvironment" value="true" />
+		<property name="systemPropertiesModeName" value="SYSTEM_PROPERTIES_MODE_OVERRIDE" />
+	</bean>
+	
+	<!-- Resource bundle, it is here since we use it in java classes, normally mvc-dispatcher-servlet.xml will not be used for testing -->
+	<bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
+		<property name="basenames">
+			<list>
+				<value>locale.messages</value>
+				<value>locale.validation.messages</value>
+				<value>locale.email.messages</value>
+			</list>
+		</property>
+	</bean>
+	
+	
+</beans>

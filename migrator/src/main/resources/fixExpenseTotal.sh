@@ -1,0 +1,1 @@
+java -cp ".:lib/*:migrator-1.0.jar" com.mayuran19.migrator.FixIncomeAccountTotal

@@ -1,0 +1,104 @@
+subprojects {
+  apply plugin: 'java'
+  apply plugin: 'eclipse'
+
+  repositories {
+     mavenCentral()
+     maven {
+        url "http://repository.codehaus.org"
+        url "http://maven.restlet.org"
+   	 }
+  }
+
+	configurations {
+	  compile
+	  runtime
+	  all*.exclude group: 'commons-logging' //exclude the commons-logging
+	  all*.exclude group: 'javax.jms'
+	  all*.exclude group: 'com.sun.jdmk'
+	  all*.exclude group: 'com.sun.jmx'
+	}
+
+  dependencies {
+    testCompile 'junit:junit:4.8.2'
+	  compile group: 'org.springframework', name: 'spring-core', version: '3.0.6.RELEASE'
+	  compile group: 'org.springframework', name: 'spring-expression', version: '3.0.6.RELEASE'
+	  compile group: 'org.springframework', name: 'spring-beans', version: '3.0.6.RELEASE'
+	  compile group: 'org.springframework', name: 'spring-aop', version: '3.0.6.RELEASE'
+	  compile group: 'org.springframework', name: 'spring-context', version: '3.0.6.RELEASE'
+	  compile group: 'org.springframework', name: 'spring-context-support', version: '3.0.6.RELEASE'
+	  compile group: 'org.springframework', name: 'spring-tx', version: '3.0.6.RELEASE'
+	  compile group: 'org.springframework', name: 'spring-jdbc', version: '3.0.6.RELEASE'
+	  compile group: 'org.springframework', name: 'spring-orm', version: '3.0.6.RELEASE'
+	  compile group: 'org.springframework', name: 'spring-oxm', version: '3.0.6.RELEASE'
+	  compile group: 'org.springframework', name: 'spring-test', version: '3.0.6.RELEASE'
+
+    compile group: 'javax.mail', name: 'mail', version: '1.4.4'
+
+    compile group: 'org.apache.velocity', name: 'velocity', version: '1.7'
+
+    compile group: 'com.googlecode.flyway', name: 'flyway-core', version: '1.4.2'
+
+	  //mysql dependancies
+	  compile group: 'mysql', name: 'mysql-connector-java', version: '5.0.5'
+	  //end mysql dependancies
+	    
+	  //apache commons lang
+	  compile group: 'commons-lang', name: 'commons-lang', version: '2.5'
+    compile group: 'commons-io', name: 'commons-io', version: '2.2'
+
+    //apache commons fileupload  
+    compile group: 'commons-fileupload', name: 'commons-fileupload', version: '1.2.2'
+
+	  //log4j
+	  compile(group: 'log4j', name: 'log4j', version: '1.2.15'){
+	  	exclude group: 'javax.jms', name:'jms', version:'1.1'
+	  	exclude group: 'com.sun.jdmk', name:'jmxtools'
+	  	exclude group: 'com.sun.jmx', name:'jmxri'
+	  }
+
+	  compile group: 'com.sun.jersey', name: 'jersey-client', version: '1.12'
+	  compile group: 'com.sun.jersey.contribs', name: 'jersey-apache-client', version: '1.12'
+
+    compile(group: 'dom4j', name: 'dom4j', version: '1.6.1'){
+      exclude group: 'xml-apis', name: 'xml-apis'
+    }
+
+    compile(group: 'xom', name: 'xom', version: '1.2.5'){
+      
+    }
+    
+    compile(group: 'jaxen', name: 'jaxen', version: '1.1.3'){
+      exclude group: 'maven-plugins', name: 'maven-cobertura-plugin'
+      exclude group: 'maven-plugins', name: 'maven-findbugs-plugin'
+      exclude group: 'xml-apis', name: 'xml-apis'
+      exclude group: 'xerces', name: 'xercesImpl'
+      exclude group: 'xom', name: 'xom'
+      exclude group: 'jaxen', name: 'jaxen'
+      exclude group: 'dom4j', name: 'dom4j'
+    }
+
+    //Restlet API for restful service
+	  compile group: 'org.restlet.jse', name: 'org.restlet', version: '2.0.0'
+
+    //runtime dependencies
+
+	  //Remove the commons-logging from the springframework and install bridge between commons-logging and slf4j and bridge slf4j and log4j
+	  runtime group: 'org.slf4j', name: 'jcl-over-slf4j', version: '1.6.1'
+	  runtime group: 'org.slf4j', name: 'slf4j-api', version: '1.6.1'
+	  runtime group: 'org.slf4j', name: 'slf4j-log4j12', version: '1.6.1'
+	  runtime group: 'log4j', name: 'log4j', version: '1.2.15'
+
+	  //Javassist (JAVA programming ASSISTant) makes Java bytecode manipulation simple. It is a class library for editing bytecodes in Java.
+	  runtime group: 'javassist', name: 'javassist', version: '3.12.1.GA'
+	  
+	  //jacson JSON parser
+	  runtime group: 'org.codehaus.jackson', name: 'jackson-mapper-asl', version: '1.8.5'
+  }
+
+  version = '1.0'
+
+  jar {
+      manifest.attributes provider: 'gradle'
+  }
+}

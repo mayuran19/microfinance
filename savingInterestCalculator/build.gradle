@@ -1,0 +1,11 @@
+sourceSets {
+  main {
+    resources {
+      srcDir "../web/src/main/resources"
+    }
+  }
+}
+
+dependencies {
+	compile project(':core')
+}

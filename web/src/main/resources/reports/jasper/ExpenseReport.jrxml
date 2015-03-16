@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ExpenseReport" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="80728ec3-f1ac-426c-8dc6-e587ed940a07">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="table">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TH" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_CH" mode="Opaque" backcolor="#FFBFBF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<queryString>
+		<![CDATA[SELECT DISTINCT acc_expenses.id,
+		Coalesce((SELECT Sum(acc_expense_details.total) FROM acc_expense_details WHERE acc_expense_details.expense_id = acc_expenses.id), 0)                                                                                               AS total,
+		Coalesce((SELECT Sum(payments.amount) FROM payments WHERE payments.expense_id = acc_expenses.id), 0)                                                                                                                               AS payment,
+		((SELECT Coalesce(Sum(acc_expense_details.total), 0) FROM acc_expense_details WHERE acc_expense_details.expense_id = acc_expenses.id) - (SELECT Coalesce(Sum(payments.amount), 0) FROM payments WHERE payments.expense_id = acc_expenses.id) ) AS due_amount,
+		acc_vendors.name,
+		acc_expenses.DATE,
+		acc_expenses.due_date,
+		acc_expenses.invoice_number,
+		acc_expenses.purchase_order,
+		acc_expenses.cheque_no
+	FROM   acc_expenses
+    	INNER JOIN acc_vendors
+		ON acc_vendors.id = acc_expenses.vendor_id
+	order by acc_expenses.DATE desc]]>
+	</queryString>
+	<field name="id" class="java.lang.Long"/>
+	<field name="total" class="java.math.BigDecimal"/>
+	<field name="payment" class="java.math.BigDecimal"/>
+	<field name="due_amount" class="java.math.BigDecimal"/>
+	<field name="name" class="java.lang.String"/>
+	<field name="DATE" class="java.sql.Timestamp"/>
+	<field name="due_date" class="java.sql.Timestamp"/>
+	<field name="invoice_number" class="java.lang.String"/>
+	<field name="purchase_order" class="java.lang.String"/>
+	<field name="cheque_no" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="50" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="3574fb76-6881-404f-bf4e-07db73a49bf0" style="table_TD" positionType="Float" stretchType="RelativeToTallestObject" x="0" y="0" width="59" height="50" isPrintWhenDetailOverflows="true" backcolor="#C3982C"/>
+				<box topPadding="0" leftPadding="0">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Name]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="68d9ee5d-7175-45c3-a2ba-4d26ae0ebbed" style="table_TD" positionType="Float" stretchType="RelativeToTallestObject" x="60" y="0" width="54" height="50" isPrintWhenDetailOverflows="true" backcolor="#C3982C"/>
+				<box topPadding="0">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Invoice No]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="4a261ca0-3608-475a-957e-c56e3803047d" style="table_TD" stretchType="RelativeToTallestObject" x="114" y="0" width="56" height="50" isPrintWhenDetailOverflows="true" backcolor="#C3982C"/>
+				<box topPadding="0">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Purchase Order]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="43c5cc7d-75cf-4c29-aff7-ed63924fc15a" style="table_TD" positionType="Float" stretchType="RelativeToTallestObject" x="171" y="0" width="60" height="50" isPrintWhenDetailOverflows="true" backcolor="#C3982C"/>
+				<box topPadding="0">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Check No]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="4babd30a-300e-4aef-b96a-2d8af735020a" style="table_TD" positionType="Float" stretchType="RelativeToTallestObject" x="232" y="0" width="70" height="50" isPrintWhenDetailOverflows="true" backcolor="#C3982C"/>
+				<box topPadding="0">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Date]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="b5f04d03-7b1c-4422-b997-2e97bb8e5d22" style="table_TD" positionType="Float" stretchType="RelativeToTallestObject" x="303" y="0" width="69" height="50" isPrintWhenDetailOverflows="true" backcolor="#C3982C"/>
+				<box topPadding="0">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Due date]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="1604311e-e667-4c90-bb7b-a44027d2c083" style="table_TD" positionType="Float" stretchType="RelativeToTallestObject" x="372" y="0" width="63" height="50" isPrintWhenDetailOverflows="true" backcolor="#C3982C"/>
+				<box topPadding="0">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Payment]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="e686afd9-a4c2-4756-b1e0-9ac7fbe7c119" style="table_TD" positionType="Float" stretchType="RelativeToTallestObject" x="435" y="0" width="60" height="50" isPrintWhenDetailOverflows="true" backcolor="#C3982C"/>
+				<box topPadding="0">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Due amount]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="0edf0a23-7847-42eb-b140-355ff6066ed6" style="table_TD" positionType="Float" stretchType="RelativeToTallestObject" x="495" y="0" width="60" height="50" isPrintWhenDetailOverflows="true" backcolor="#C3982C"/>
+				<box topPadding="0">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Total]]></text>
+			</staticText>
+		</band>
+	</title>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="0890d464-018d-4b09-a965-ed80c4f10cd1" style="table_TD" positionType="Float" stretchType="RelativeToTallestObject" x="0" y="0" width="59" height="20" isPrintWhenDetailOverflows="true"/>
+				<box leftPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{name}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="d3a9ab7a-841c-4264-9a01-87f54eae2c9d" style="table_TD" positionType="Float" stretchType="RelativeToTallestObject" x="59" y="0" width="55" height="20" isPrintWhenDetailOverflows="true"/>
+				<box leftPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{invoice_number}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="a58b404b-9be5-4de3-98c7-cdb34604816f" style="table_TD" positionType="Float" stretchType="RelativeToTallestObject" x="114" y="0" width="56" height="20" isPrintWhenDetailOverflows="true"/>
+				<box leftPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{purchase_order}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="2c2c469c-079e-473e-9901-95d71f59ebae" style="table_TD" positionType="Float" stretchType="RelativeToTallestObject" x="170" y="0" width="61" height="20" isPrintWhenDetailOverflows="true"/>
+				<box leftPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{cheque_no}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="c47e58c0-1f3e-42d5-91cb-56f62891b119" style="table_TD" positionType="Float" stretchType="RelativeToTallestObject" x="231" y="0" width="71" height="20" isPrintWhenDetailOverflows="true"/>
+				<box leftPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{DATE} == null ? "" : new SimpleDateFormat("dd-MM-yyyy").format($F{DATE})]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="6c4f045e-03dc-4c6b-b48c-3103916cbbcb" style="table_TD" positionType="Float" stretchType="RelativeToTallestObject" x="302" y="0" width="70" height="20" isPrintWhenDetailOverflows="true"/>
+				<box leftPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{due_date} == null ? "" : new SimpleDateFormat("dd-MM-yyyy").format($F{due_date})]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="4ca5c2f8-99db-4de9-81ca-a1e51ed4ca39" style="table_TD" positionType="Float" stretchType="RelativeToTallestObject" x="372" y="0" width="63" height="20" isPrintWhenDetailOverflows="true"/>
+				<box leftPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{payment}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="5a784f7f-bb70-437f-9d39-22bef9a9bb5c" style="table_TD" positionType="Float" stretchType="RelativeToTallestObject" x="435" y="0" width="60" height="20" isPrintWhenDetailOverflows="true"/>
+				<box leftPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{due_amount}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="f19c3e7e-2233-49a2-abf0-7ad6ace0cf88" style="table_TD" positionType="Float" stretchType="RelativeToTallestObject" x="495" y="0" width="60" height="20" isPrintWhenDetailOverflows="true"/>
+				<box leftPadding="2" rightPadding="2">
+					<topPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{total}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

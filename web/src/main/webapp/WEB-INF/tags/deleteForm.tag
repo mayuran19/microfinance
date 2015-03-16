@@ -1,0 +1,15 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@ attribute name="deleteUrl" required="true" rtexprvalue="true" %>
+<%@ attribute name="formId" required="false" rtexprvalue="true" %>
+
+<script type="text/javascript">
+	function submitForm(formId){
+		$("#" + formId).submit();
+	}
+</script>
+<form:form action="${deleteUrl}" method="delete" id="${formId}">
+	<a href="#" onclick="if(confirm('Are you sure you want to delete this?')){submitForm('${formId}');}">Delete</a>
+</form:form>

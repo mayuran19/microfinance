@@ -1,0 +1,35 @@
+sourceSets {
+  main {
+    resources {
+      srcDir "../web/src/main/resources"
+    }
+  }
+}
+
+dependencies {
+	compile project(':core')	
+}
+
+task copyToLib( type: Copy ) {
+    into "$buildDir/libs/lib"
+    from configurations.runtime
+}
+
+task copyShFiles(type: Copy){
+	into "$buildDir/libs/"
+    from "$projectDir/src/main/resources/fixExpenseTotal.sh"
+}
+
+//jar.doLast{
+//	println 'copy sh file'
+//	copy{
+//		from '$projectDir/src/main/resources/fixExpenseTotal.sh'
+//		into '$buildDir/libs'
+//	}
+//}
+
+jar { dependsOn copyToLib,copyShFiles }
+
+jar{
+	exclude('fixExpenseTotal.sh')
+}

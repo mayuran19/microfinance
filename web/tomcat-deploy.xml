@@ -1,0 +1,63 @@
+<project name="tomcat-deploy" basedir=".">
+
+	<property name="tomcat.manager.url" value="http://localhost:8080/manager/html">
+	</property>
+
+	<property name="tomcat.manager.username" value="tomcat">
+	</property>
+
+	<property name="tomcat.manager.password" value="s3cret">
+	</property>
+
+	<property name="context" value="microfinance" />
+
+	<property name="install.file" value="/home/mayuran/workspace/java/clcms-multimodule/web/build/libs/microfinance-1.0.war" />
+
+	<path id="tomcat-libs">
+		<fileset dir="/home/mayuran/programfiles/apache-tomcat-7.0.26/lib">
+			<include name="*.jar" />
+		</fileset>
+		<fileset dir="/home/mayuran/programfiles/apache-tomcat-7.0.26/bin">
+			<include name="*.jar" />
+		</fileset>
+	</path>
+
+	<taskdef name="deploy" classname="org.apache.catalina.ant.DeployTask" classpathref="tomcat-libs">
+	</taskdef>
+
+	<taskdef name="list" classname="org.apache.catalina.ant.ListTask" classpathref="tomcat-libs">
+	</taskdef>
+
+	<taskdef name="reload" classname="org.apache.catalina.ant.ReloadTask" classpathref="tomcat-libs">
+	</taskdef>
+
+	<taskdef name="undeploy" classname="org.apache.catalina.ant.UndeployTask" classpathref="tomcat-libs">
+	</taskdef>
+
+	<taskdef name="stop" classname="org.apache.catalina.ant.StopTask" classpathref="tomcat-libs">
+	</taskdef>
+
+	<taskdef name="start" classname="org.apache.catalina.ant.StartTask" classpathref="tomcat-libs">
+	</taskdef>
+
+	<target name="reload" description="Reload Web application">
+		<reload password="${tomcat.manager.password}" path="/${context}" url="${tomcat.manager.url}" username="${tomcat.manager.username}" />
+	</target>
+
+	<target name="stop" description="Stop Web application">
+		<stop password="${tomcat.manager.password}" path="/${context}" url="${tomcat.manager.url}" username="${tomcat.manager.username}" />
+	</target>
+
+	<target name="start" description="Start Web application">
+		<start password="${tomcat.manager.password}" path="/${context}" url="${tomcat.manager.url}" username="${tomcat.manager.username}" />
+	</target>
+
+	<target name="deploy" description="Install application to servlet container" depends="war">
+		<deploy password="${tomcat.manager.password}" path="/${context}" update="true" url="${tomcat.manager.url}" username="${tomcat.manager.username}" war="${install.file}" />
+	</target>
+
+	<target name="undeploy" description="Remove application on servlet container">
+		<undeploy password="${tomcat.manager.password}" path="/${context}" url="${tomcat.manager.url}" username="${tomcat.manager.username}" />
+	</target>
+
+</project>

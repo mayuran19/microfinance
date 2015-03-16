@@ -1,0 +1,15 @@
+INSERT INTO divisions(id, name, description, district_id, status, created_at, updated_at) values(1, 'Jaffna', 'Jaffna', 1, 1, now(), now());
+INSERT INTO divisions(id, name, description, district_id, status, created_at, updated_at) values(2, 'Nallur', 'Nallur', 1, 1, now(), now());
+INSERT INTO divisions(id, name, description, district_id, status, created_at, updated_at) values(3, 'Chankani', 'Chankani', 1, 1, now(), now());
+INSERT INTO divisions(id, name, description, district_id, status, created_at, updated_at) values(4, 'Sandilipay', 'Sandilipay', 1, 1, now(), now());
+INSERT INTO divisions(id, name, description, district_id, status, created_at, updated_at) values(5, 'Tellipalai', 'Tellipalai', 1, 1, now(), now());
+INSERT INTO divisions(id, name, description, district_id, status, created_at, updated_at) values(6, 'Uduvil', 'Uduvil', 1, 1, now(), now());
+INSERT INTO divisions(id, name, description, district_id, status, created_at, updated_at) values(7, 'Kopay', 'Kopay', 1, 1, now(), now());
+INSERT INTO divisions(id, name, description, district_id, status, created_at, updated_at) values(8, 'Karaveddy', 'Karaveddy', 1, 1, now(), now());
+INSERT INTO divisions(id, name, description, district_id, status, created_at, updated_at) values(9, 'Point Pedro', 'Point Pedro', 1, 1, now(), now());
+INSERT INTO divisions(id, name, description, district_id, status, created_at, updated_at) values(10, 'Chavakachcheri', 'Chavakachcheri', 1, 1, now(), now());
+INSERT INTO divisions(id, name, description, district_id, status, created_at, updated_at) values(11, 'Maruthankerny', 'Maruthankerny', 1, 1, now(), now());
+INSERT INTO divisions(id, name, description, district_id, status, created_at, updated_at) values(12, 'Velanai', 'Velanai', 1, 1, now(), now());
+INSERT INTO divisions(id, name, description, district_id, status, created_at, updated_at) values(13, 'Delft', 'Delft', 1, 1, now(), now());
+INSERT INTO divisions(id, name, description, district_id, status, created_at, updated_at) values(14, 'Kayts', 'Kayts', 1, 1, now(), now());
+INSERT INTO divisions(id, name, description, district_id, status, created_at, updated_at) values(15, 'Karainagar', 'Karainagar', 1, 1, now(), now());

@@ -1,0 +1,47 @@
+configurations {
+    casterSchemaGenerate
+}
+
+repositories {
+    mavenCentral()
+    maven {
+        url "http://repository.codehaus.org"
+        url "http://maven.restlet.org"
+   	}
+}
+
+dependencies {
+	//hibernate dependencies
+	compile group: 'org.hibernate', name: 'hibernate-core', version: '3.3.2.GA'
+	compile group: 'org.hibernate', name: 'hibernate-annotations', version: '3.4.0.GA'
+	compile group: 'cglib', name: 'cglib', version: '2.2'
+	//end hibernate dependencies
+
+  	compile group: 'org.springframework', name: 'spring-web', version: '3.0.6.RELEASE'
+	compile group: 'org.springframework', name: 'spring-webmvc', version: '3.0.6.RELEASE'
+	compile group: 'org.springframework.security', name: 'spring-security-core', version: '3.0.5.RELEASE'
+	compile group: 'org.springframework.security', name: 'spring-security-web', version: '3.0.5.RELEASE'
+	compile group: 'org.springframework.security', name: 'spring-security-config', version: '3.0.5.RELEASE'
+	compile group: 'org.springframework.security', name: 'spring-security-ldap', version: '3.0.5.RELEASE'
+	compile group: 'org.springframework.security', name: 'spring-security-taglibs', version: '3.0.5.RELEASE'
+	
+	//apache POI lib
+	compile group: 'org.apache.poi', name: 'poi', version: '3.8'
+	
+	//schema group: 'org.codehaus.castor', name: 'castor-ddlgen', version: '1.3.1'
+	//casterSchemaGenerate group: 'org.codehaus.castor', name: 'castor-anttasks', version: '1.3rc1'
+	
+}
+
+task castorGenerateJava << {
+	ant.taskdef(name: 'schemagen', classname: 'org.castor.anttask.XMLInstance2SchemaTask', classpath: configurations.casterSchemaGenerate.asPath)
+	ant.schemagen(file: 'src/main/resources/input.xml', xmlSchemaFileName: 'src/main/resources/input.xsd')
+}
+
+task jaxbXsdToJava(type:Exec){
+	commandLine 'xjc', '-d', 'src/main/java', '-p', 'com.mayuran19.reports.jasperServer.runReport.response', 'src/main/resources/input.xsd'
+}
+
+task jrsResDisToJava(type:Exec){
+	commandLine 'xjc', '-d', 'src/main/java', '-p', 'com.mayuran19.reports.jasperServer.runReport.request', 'src/main/resources/resourceDiscriptor.xsd'
+}

@@ -1,0 +1,58 @@
+package com.suwadi.domain;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
+@Entity(name = "acc_term_of_payments")
+@org.hibernate.annotations.Entity(dynamicUpdate = true)
+public class TermOfPayment extends DomainObject {
+	private Long id;
+	private String termOfPayment;
+	private String description;
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public String getTermOfPayment() {
+		return termOfPayment;
+	}
+
+	public void setTermOfPayment(String termOfPayment) {
+		this.termOfPayment = termOfPayment;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj != null) {
+			if (obj instanceof TermOfPayment) {
+				TermOfPayment other = (TermOfPayment) obj;
+				if (this.getId().longValue() == other.getId().longValue()) {
+					return true;
+				} else {
+					return false;
+				}
+			} else {
+				return false;
+			}
+		} else {
+			return false;
+		}
+	}
+}

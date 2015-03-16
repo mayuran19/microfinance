@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<beans:beans xmlns="http://www.springframework.org/schema/security"
+	xmlns:beans="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:lang="http://www.springframework.org/schema/lang" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans   http://www.springframework.org/schema/beans/spring-beans-3.0.xsd      http://www.springframework.org/schema/security    http://www.springframework.org/schema/security/spring-security-3.0.xsd        http://www.springframework.org/schema/context         http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+	
+	<context:component-scan base-package="com.suwadi.web.security" />
+	<!-- 
+	<http auto-config="true">
+		<intercept-url pattern="/sessions/add" />
+		<intercept-url access="IS_AUTHENTICATED_REMEMBERED"
+			pattern="/secure/*" />
+		<form-login authentication-failure-url="/pages/login.jsp?login_error=true"
+			login-page="/sessions/add" />
+		<logout 
+			invalidate-session="true"
+			logout-success-url="/sessions/add"
+			logout-url="/logout"
+		/>
+		<remember-me key="MicroFinanceRMKey" user-service-ref="userDetailsService" />
+	</http>
+	-->
+	<http auto-config="false" access-denied-page="/" entry-point-ref="authenticationEntryPoint" use-expressions="true">
+		<intercept-url pattern="/" />
+		<intercept-url pattern="/admin"/>
+		
+		<intercept-url pattern="/admin/**" access="hasAnyRole('ROLE_ROOT','ROLE_ADMIN')"/>
+		<intercept-url pattern="/accounting/**" access="hasAnyRole('ROLE_ROOT','ROLE_ADMIN')"/>
+		<intercept-url pattern="/microfinance/**" access="hasAnyRole('ROLE_ROOT','ROLE_ADMIN')"/>
+		<intercept-url pattern="/payroll/**" access="hasAnyRole('ROLE_ROOT','ROLE_ADMIN')"/>
+		<intercept-url pattern="/documentTracking/**" access="hasAnyRole('ROLE_ROOT','ROLE_ADMIN')"/>
+		<intercept-url pattern="/reports/**" access="hasAnyRole('ROLE_ROOT','ROLE_ADMIN')"/>
+		<logout invalidate-session="true" logout-success-url="/" logout-url="/logout"/>
+		
+		<!-- 
+		<custom-filter ref="blacklistFilter" before="FILTER_SECURITY_INTERCEPTOR" />
+		 -->
+		<custom-filter ref="authenticationFilter" position="FORM_LOGIN_FILTER" />
+	</http>
+	
+	<!-- Custom filter for username and password. The real customization is done in the customAthenticationManager -->
+	<beans:bean id="authenticationFilter" class="org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter">
+		<beans:property name="authenticationManager" ref="customAuthenticationManager"/>
+		<beans:property name="authenticationFailureHandler" ref="customAuthenticationFailureHandler"/>
+		<beans:property name="authenticationSuccessHandler" ref="customAuthenticationSuccessHandler"/>
+	</beans:bean>
+	
+	<!-- 
+	<authentication-manager alias="authenticationManager">
+		<authentication-provider user-service-ref="userDetailsService">
+			<password-encoder hash="md5" />
+		</authentication-provider>
+	</authentication-manager>
+	 
+	<authentication-manager alias="authenticationManager">
+		<authentication-provider user-service-ref="jpaUserDetailsService">
+			<password-encoder hash="md5" />
+		</authentication-provider>
+	</authentication-manager>
+	
+	<beans:bean
+		class="org.springframework.security.core.userdetails.jdbc.JdbcDaoImpl"
+		id="userDetailsService">
+		<beans:property name="rolePrefix" value="ROLE_" />
+		<beans:property name="dataSource" ref="springSecurityDataSource" />
+		<beans:property name="usersByUsernameQuery"
+			value="SELECT username,password,enabled FROM users WHERE username = ?" />
+		<beans:property name="authoritiesByUsernameQuery"
+			value="SELECT u.username, a.authorityname FROM users u JOIN users_authorities ua on u.id = ua.users_id JOIN authorities a on ua.authorities_id = a.id WHERE u.username = ?" />
+	</beans:bean>
+	-->
+	
+	<!-- 
+	<global-method-security>
+		<protect-pointcut access="IS_AUTHENTICATED_REMEMBERED"
+			expression="execution(* org.mf.service.CustomerService.*(..))" />
+		<protect-pointcut access="IS_AUTHENTICATED_REMEMBERED"
+			expression="execution(* org.mf.dao.CustomerDAO.*(..))" />
+	</global-method-security>
+	 -->
+	
+	<beans:bean class="org.springframework.security.authentication.encoding.Md5PasswordEncoder" id="passwordEncoder"></beans:bean>
+	
+	<!--  Custom filter to deny unwanted users even though registered -->
+	<!-- 
+ 	<beans:bean id="blacklistFilter" class="org.mf.security.filter.BlacklistFilter" />
+ 	 -->
+	
+	<beans:bean id="customAuthenticationFailureHandler" class="org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler">
+		<beans:property name="defaultFailureUrl" value="/?login_error=true"></beans:property>
+	</beans:bean>
+	
+	<!-- We just actually need to set the default target url here -->
+	<!-- 
+ 	<beans:bean id="customAuthenticationSuccessHandler" class="org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler" >
+ 		<beans:property name="defaultTargetUrl" value="/admin"/>
+ 	</beans:bean>
+	 -->
+	<beans:bean id="customAuthenticationSuccessHandler" class="com.suwadi.web.security.CustomSavedRequestAwareAuthenticationSuccessHandler" >
+ 		<beans:property name="defaultTargetUrl" value="/"/>
+ 	</beans:bean>
+ 	
+	<!-- The AuthenticationEntryPoint is responsible for redirecting the user to a particular page, like a login page,
+ 	whenever the server sends back a response requiring authentication -->
+ 	<!-- See Spring-Security Reference 5.4.1 for more info -->
+	<beans:bean id="authenticationEntryPoint" class="org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint">
+		<beans:property name="loginFormUrl" value="/" />
+	</beans:bean>
+	
+	<!-- The tag below has no use but Spring Security needs it to autowire the parent property of 
+	org.springframework.security.authentication.ProviderManager. Otherwise we get an error 
+	A probable bug. This is still under investigation-->
+	<authentication-manager/>
+</beans:beans>

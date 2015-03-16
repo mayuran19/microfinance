@@ -1,0 +1,81 @@
+apply plugin: 'war'
+apply plugin: 'jetty'
+
+ant.importBuild 'build.xml'
+
+repositories {
+   mavenCentral()
+   maven {
+        url "http://maven.restlet.org"
+   }
+}
+
+configurations {
+
+}
+
+dependencies {
+	compile project(':core')
+	compile group: 'org.springframework', name: 'spring-web', version: '3.0.6.RELEASE'
+	compile group: 'org.springframework', name: 'spring-webmvc', version: '3.0.6.RELEASE'
+	compile group: 'org.springframework.security', name: 'spring-security-core', version: '3.0.5.RELEASE'
+	compile group: 'org.springframework.security', name: 'spring-security-web', version: '3.0.5.RELEASE'
+	compile group: 'org.springframework.security', name: 'spring-security-config', version: '3.0.5.RELEASE'
+	compile group: 'org.springframework.security', name: 'spring-security-ldap', version: '3.0.5.RELEASE'
+	compile group: 'org.springframework.security', name: 'spring-security-taglibs', version: '3.0.5.RELEASE'
+	
+	//jstl tag lib
+  	compile group: 'javax.servlet', name: 'jstl', version: '1.2'
+  	
+  	providedCompile("javax.servlet:servlet-api:2.5")
+}
+
+war {
+	baseName = "microfinance"
+}
+
+tasks['tomcat.deploy'].dependsOn war
+
+stopKey = 'foo'
+stopPort = 9451
+httpPort = 8163
+deployDirectory = '/home/mayuran/programfiles/apache-tomcat-7.0.26/webapps/microfinance'
+
+task deployToTomcat(dependsOn: 'war') << {
+	def dir = new File('$deployDirectory')
+	dir.deleteDir()
+	ant.unzip(src: war.archivePath, dest: "$buildDir/exploded")
+	copy {
+		from "${buildDir}/exploded"
+		into "$deployDirectory"
+	}
+	//startTomcat.execute()
+}
+
+task deployJsp << {
+	def dir = new File('$deployDirectory/WEB-INF/pages')
+	def img = new File('$deployDirectory/WEB-INF/images')
+	def css = new File('$deployDirectory/WEB-INF/stylesheet')
+	def js = new File('$deployDirectory/WEB-INF/javascript')
+	dir.deleteDir()
+	img.deleteDir()
+	css.deleteDir()
+	js.deleteDir()
+	copy{
+		from "${rootDir}/${webAppDirName}/WEB-INF/pages"
+		into "$deployDirectory/WEB-INF/pages"
+	}
+	copy{
+		from "${rootDir}/${webAppDirName}/images"
+		into "$deployDirectory/images"
+	}
+	copy{
+		from "${rootDir}/${webAppDirName}/stylesheet"
+		into "$deployDirectory/stylesheet"
+	}
+	copy{
+		from "${rootDir}/${webAppDirName}/javascript"
+		into "$deployDirectory/javascript"
+	}
+	println("${rootDir}")
+}
